@@ -1,0 +1,41 @@
+@startuml C4_Elements
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include DEVICONS/angular.puml
+!include DEVICONS/java.puml
+!include DEVICONS/msql_server.puml
+!include FONTAWESOME/users.puml
+
+title <b> C4 Model - Web Service </b>
+
+System_Boundary(unsw, "UNSW"){
+    System( dataCenter, "Data Center" )
+    System( webService, "Web Application" )
+    System( applicationService, "Application Services" )
+    System( authService, "Authentication Service" )
+    ContainerDb( applicationDatabase, "Application Database" )
+    ContainerDb( serverDatabase, "Server Database" )
+}
+Person(user, "User")
+System_Boundary(aws, "Amazon Web Services" ){
+    System( cloudfront, "Cloudfront" )
+}
+System_Ext(backupData, "Backup Data")
+System_Ext(ciscoAnyconnect, "Cisco AnyConnect")
+
+BiRel_D(user, webService, "Request/Response")
+
+BiRel(user, applicationService, "Request/Response")
+BiRel_D(webService, authService, "Request/Response")
+BiRel_D(applicationService, authService, "Request/Response")
+Rel_D(webService, dataCenter, "Access Application Data")
+Rel(webService, cloudfront, "Retrieve HTML")
+Rel(dataCenter, backupData, "Store Data")
+Rel(dataCenter, applicationDatabase, "Store/Retrieve Data")
+Rel(dataCenter, serverDatabase, "Store/Retrieve Data")
+BiRel(authService, ciscoAnyconnect, "MFA Authorization")
+BiRel_L(ciscoAnyconnect, user, "MFA Authorization")
+
+@enduml

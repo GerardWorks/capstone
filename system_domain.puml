@@ -1,0 +1,25 @@
+@startuml C4_Elements
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include DEVICONS/angular.puml
+!include DEVICONS/java.puml
+!include DEVICONS/msql_server.puml
+!include FONTAWESOME/users.puml
+
+title <b> C4 Model - UNSW Domain Boundary </b>
+
+System_Boundary(unsw, "UNSW"){
+    System( dataCenter, "Data Center" )
+    System( webService, "Web Application" )
+
+}
+Person(user, "User")
+System_Ext(amazonWebServices, "Amazon Web Services")
+
+Rel_D(user, webService, "Uses")
+Rel_D(webService, dataCenter, "Access Application Data")
+Rel_R(webService, amazonWebServices, "Backend Services")
+
+@enduml
